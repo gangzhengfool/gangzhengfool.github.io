@@ -39,18 +39,20 @@
 </style>
     <title>Document</title>
 </head>
-<body>
+<body >
     <div id="app">
         <div  v-html="info.data.content_list[0].forward"></div>
-        <video  width="320" height="240" controls="controls" >
-            <source src="http://uc.cdn.kaiyanapp.com/6b7cb67fce3a5fe446c55045c254bd1c_1280x720.mp4?t=1508664329&k=1a4bddfdad91aafd" type="video/mp4" />
 
-        </video>
         <div   class="author" v-html="info.data.content_list[0].words_info"></div>
        <img :src="info.data.content_list[0].img_url">
       <div class="title" v-html="obj.data.title"></div>
       <div class="author"  v-html="obj.data.author"></div>
-     <div v-html=" obj.data.content  " ></div>
+     <div v-html=" obj.data.content  "  v-on:click="getreport()"></div>
+        <video  width="100%" height="40%" controls="controls" >
+
+            <source :src="videoobj" type="video/mp4" />
+
+        </video>
     </div>
 <script src="js/vue.js"></script>
 <script src="js/vue-resource.js"></script>
@@ -64,21 +66,27 @@
 
    var vm=new Vue({
         el:"#app",
+
         data:{
             arr:{},
             obj:{},
             oneartclie:{},
             info:{},
-            voideoobj:{},
+            videoobj:'',
             apiUrl: "https://interface.meiriyiwen.com/article/random?dev=1](https://interface.meiriyiwen.com/article/random?dev=1"
         },
-   ready: function() {
+   created: function() {
                     this. getreport()
                     object=this.arr;
               },
           
         methods:{
             getreport:function(apiUrl){
+
+                var num=Math.floor(Math.random()*10000);
+                console.log(num);
+                16048
+                this.videoobj='http://baobab.kaiyanapp.com/api/v1/playUrl?vid='+num+'&editionType=high&source=qcloud';
                 this.$http.get(this.apiUrl).then(function(response){
                     this.arr=response.data;
 
@@ -86,27 +94,21 @@
                    // console.log(this.obj);
                     
                 })
-                this.$http.post('http://baobab.kaiyanapp.com/api/v4/discovery/hot').then(function(response){
-                    this.videoobj=response.data;
 
-
-                    console.log(this.videoobj);
-
-                })
 
                 this.$http.get('http://v3.wufazhuce.com:8000/api/onelist/idlist/?channel=wdj&version=4.0.2&uuid=ffffffff-a90e-706a-63f7-ccf973aae5ee&platform=android').then(function(response){
 
 
                     this.oneartclie=eval('('+response.data+')');
                     //console.log(this.oneartclie.data);
-                    for(var i=0;i<this.oneartclie.data.length;i++){
-                        //console.log(this.oneartclie.data[i]);
-                       var url= 'http://v3.wufazhuce.com:8000/api/onelist/'+this.oneartclie.data[0]+'/0?cchannel=wdj&version=4.0.2&uuid=ffffffff-a90e-706a-63f7-ccf973aae5ee&platform=android';
+                    var num=Math.floor(Math.random()*1000);
+                    console.log(num);
+                       var url= 'http://v3.wufazhuce.com:8000/api/onelist/'+num+'/0?cchannel=wdj&version=4.0.2&uuid=ffffffff-a90e-706a-63f7-ccf973aae5ee&platform=android';
                         this.$http.get(url).then(function (re){
                             this.info=eval('('+re.data+')');
                            // console.log( this.info);
                         });
-                    }
+
 
                 })
             }
