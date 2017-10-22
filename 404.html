@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="icon" href="https://b-ssl.duitang.com/uploads/item/201405/18/20140518013405_xAuNP.jpeg" type="image/x-icon"/>  
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="https://b-ssl.duitang.com/uploads/item/201405/18/20140518013405_xAuNP.jpeg" type="image/x-icon"/>
 <style type="text/css">
 .title{
     line-height: 25px;
@@ -29,11 +29,25 @@
     font-size: 18px;
     overflow:hidden;
  }
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    img{
+        width: 100%;
+    }
 </style>
     <title>Document</title>
 </head>
 <body>
     <div id="app">
+        <div  v-html="info.data.content_list[0].forward"></div>
+        <video  width="320" height="240" controls="controls" >
+            <source src="http://uc.cdn.kaiyanapp.com/6b7cb67fce3a5fe446c55045c254bd1c_1280x720.mp4?t=1508664329&k=1a4bddfdad91aafd" type="video/mp4" />
+
+        </video>
+        <div   class="author" v-html="info.data.content_list[0].words_info"></div>
+       <img :src="info.data.content_list[0].img_url">
       <div class="title" v-html="obj.data.title"></div>
       <div class="author"  v-html="obj.data.author"></div>
      <div v-html=" obj.data.content  " ></div>
@@ -53,6 +67,9 @@
         data:{
             arr:{},
             obj:{},
+            oneartclie:{},
+            info:{},
+            voideoobj:{},
             apiUrl: "https://interface.meiriyiwen.com/article/random?dev=1](https://interface.meiriyiwen.com/article/random?dev=1"
         },
    ready: function() {
@@ -64,10 +81,33 @@
             getreport:function(apiUrl){
                 this.$http.get(this.apiUrl).then(function(response){
                     this.arr=response.data;
-               
+
                     this.obj=eval('('+this.arr+')');
-                    console.log(this.obj);
+                   // console.log(this.obj);
                     
+                })
+                this.$http.post('http://baobab.kaiyanapp.com/api/v4/discovery/hot').then(function(response){
+                    this.videoobj=response.data;
+
+
+                    console.log(this.videoobj);
+
+                })
+
+                this.$http.get('http://v3.wufazhuce.com:8000/api/onelist/idlist/?channel=wdj&version=4.0.2&uuid=ffffffff-a90e-706a-63f7-ccf973aae5ee&platform=android').then(function(response){
+
+
+                    this.oneartclie=eval('('+response.data+')');
+                    //console.log(this.oneartclie.data);
+                    for(var i=0;i<this.oneartclie.data.length;i++){
+                        //console.log(this.oneartclie.data[i]);
+                       var url= 'http://v3.wufazhuce.com:8000/api/onelist/'+this.oneartclie.data[0]+'/0?cchannel=wdj&version=4.0.2&uuid=ffffffff-a90e-706a-63f7-ccf973aae5ee&platform=android';
+                        this.$http.get(url).then(function (re){
+                            this.info=eval('('+re.data+')');
+                           // console.log( this.info);
+                        });
+                    }
+
                 })
             }
         }
