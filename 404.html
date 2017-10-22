@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width,initial-scale=1">
+<style type="text/css">
+.title{
+    line-height: 25px;
+    font-size: 25px;
+    width: 70%;
+    text-align: center;
+    margin: 5px auto;
+}
+.author{
+     line-height: 18px;
+    font-size: 18px;
+    width: 70%;
+    text-align: center;
+    margin: 5px auto;
+
+}
+ .content{
+      width: 100%;
+ }
+ p{
+    width: 100%;
+    text-indent: 2em;
+    font-size: 18px;
+    overflow:hidden;
+ }
+</style>
+    <title>Document</title>
+</head>
+<body>
+    <div id="app">
+      <div class="title" v-html="obj.data.title"></div>
+      <div class="author"  v-html="obj.data.author"></div>
+     <div v-html=" obj.data.content  " ></div>
+    </div>
+<script src="js/vue.js"></script>
+<script src="js/vue-resource.js"></script>
+
+
+<script>
+
+
+  
+
+
+   var vm=new Vue({
+        el:"#app",
+        data:{
+            arr:{},
+            obj:{},
+            apiUrl: "https://interface.meiriyiwen.com/article/random?dev=1](https://interface.meiriyiwen.com/article/random?dev=1"
+        },
+   ready: function() {
+                    this. getreport()
+                    object=this.arr;
+              },
+          
+        methods:{
+            getreport:function(apiUrl){
+                this.$http.get(this.apiUrl).then(function(response){
+                    this.arr=response.data;
+               
+                    this.obj=eval('('+this.arr+')');
+                    console.log(this.obj);
+                    
+                })
+            }
+        }
+   });
+
+
+
+
+</script>
+</body>
+</html>
